@@ -1,19 +1,28 @@
-from abc import ABC, abstractmethod
-from typing import Dict, Any, List
-import numpy as np
+"""
+Interface layer for the prediction module.
+This layer handles the interaction with the model.
+"""
+from typing import Dict, Any, List, Tuple, Union
+from app.prediction.model import HeartDiseaseModel
 
-class PredictionInterface(ABC):
-    """Interface for heart disease prediction services."""
+class PredictionInterface:
+    """Interface for the heart disease prediction model."""
     
-    @abstractmethod
-    def predict(self, features: List[float]) -> Dict[str, Any]:
+    @staticmethod
+    def predict(features: List[Union[int, float]]) -> Dict[str, Any]:
         """
-        Make a heart disease prediction based on input features.
+        Make a prediction using the heart disease model.
         
         Args:
-            features: List of features in the correct order for prediction
+            features: List of input features
             
         Returns:
-            Dictionary containing prediction probability and result
+            Dictionary containing prediction results
         """
-        pass
+        model = HeartDiseaseModel()
+        probability, prediction = model.predict(features)
+        
+        return {
+            "probability": probability,
+            "prediction": prediction
+        }

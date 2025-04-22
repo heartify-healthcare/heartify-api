@@ -1,69 +1,59 @@
+"""
+Schemas for the prediction API data validation.
+"""
 from pydantic import BaseModel, Field, validator
-from typing import List, Optional, Dict, Any
+from typing import List, Optional
 
-class HeartDiseaseInputSchema(BaseModel):
-    """Schema for heart disease prediction input data.
+class HeartDiseaseInput(BaseModel):
+    """Schema for heart disease prediction input data."""
     
-    The order and names must match the training data columns.
-    """
-    age: float = Field(..., description="Age in years")
-    sex: int = Field(..., description="Sex (1 = male, 0 = female)")
-    cp: int = Field(..., description="Chest pain type (0-4)")
-    trestbps: float = Field(..., description="Resting blood pressure (in mm Hg)")
-    chol: float = Field(..., description="Serum cholesterol in mg/dl")
-    fbs: int = Field(..., description="Fasting blood sugar > 120 mg/dl (1 = true; 0 = false)")
-    restecg: int = Field(..., description="Resting electrocardiographic results (0-2)")
-    thalach: float = Field(..., description="Maximum heart rate achieved")
-    exang: int = Field(..., description="Exercise induced angina (1 = yes; 0 = no)")
-    oldpeak: float = Field(..., description="ST depression induced by exercise relative to rest")
-    slope: int = Field(..., description="Slope of the peak exercise ST segment (0-2)")
+    age: int = Field(..., ge=0, le=120, description="Age in years")
+    sex: int = Field(..., ge=0, le=1, description="Sex (0 = female, 1 = male)")
+    cp: int = Field(..., ge=0, le=4, description="Chest pain type (0-4)")
+    trestbps: int = Field(..., ge=0, description="Resting blood pressure (in mm Hg)")
+    chol: int = Field(..., ge=0, description="Serum cholesterol in mg/dl")
+    fbs: int = Field(..., ge=0, le=1, description="Fasting blood sugar > 120 mg/dl (1 = true, 0 = false)")
+    restecg: int = Field(..., ge=0, le=2, description="Resting electrocardiographic results (0, 1, 2)")
+    thalach: int = Field(..., ge=0, description="Maximum heart rate achieved")
+    exang: int = Field(..., ge=0, le=1, description="Exercise induced angina (1 = yes, 0 = no)")
+    oldpeak: float = Field(..., ge=0.0, description="ST depression induced by exercise relative to rest")
+    slope: int = Field(..., ge=0, le=3, description="The slope of the peak exercise ST segment")
     
-    @validator('sex', 'cp', 'fbs', 'restecg', 'exang', 'slope')
-    def validate_categorical(cls, v, values, field):
-        """Validate that categorical variables are in their proper ranges."""
-        ranges = {
-            'sex': [0, 1],
-            'cp': [0, 1, 2, 3, 4],
-            'fbs': [0, 1],
-            'restecg': [0, 1, 2],
-            'exang': [0, 1],
-            'slope': [0, 1, 2],
-        }
-        if v not in ranges[field.name]:
-            raise ValueError(f"{field.name} must be one of {ranges[field.name]}")
+    @validator('age')
+    def age_must_be_reasonable(cls, v):
+        if v < 18 or v > 100:
+            raise ValueError("Age should be between 18 and 100")
         return v
     
-    class Config:
-        schema_extra = {
-            "example": {
-                "age": 52,
-                "sex": 1,
-                "cp": 4,
-                "trestbps": 160,
-                "chol": 246,
-                "fbs": 0,
-                "restecg": 1,
-                "thalach": 82,
-                "exang": 1,
-                "oldpeak": 4.0,
-                "slope": 2
-            }
-        }
+    @validator('trestbps')
+    def trestbps_must_be_reasonable(cls, v):
+        if v < 50 or v > 300:
+            raise ValueError("Resting blood pressure should be between 50 and 300")
+        return v
+    
+    @validator('chol')
+    def chol_must_be_reasonable(cls, v):
+        if v < 50 or v > 700:
+            raise ValueError("Cholesterol should be between 50 and 700")
+        return v
+    
+    @validator('thalach')
+    def thalach_must_be_reasonable(cls, v):
+        if v < 50 or v > 300:
+            raise ValueError("Maximum heart rate should be between 50 and 300")
+        return v
 
-class PredictionResponseSchema(BaseModel):
+
+class PredictionResponse(BaseModel):
     """Schema for heart disease prediction response."""
-    probability: float = Field(..., description="Probability of heart disease")
+    
+    probability: float = Field(..., ge=0.0, le=1.0, description="Probability of having heart disease")
     prediction: str = Field(..., description="Prediction result (POSITIVE or NEGATIVE)")
     
     class Config:
         schema_extra = {
             "example": {
-                "probability": 0.87,
+                "probability": 0.75,
                 "prediction": "POSITIVE"
             }
         }
-
-class ErrorResponseSchema(BaseModel):
-    """Schema for error responses."""
-    error: str = Field(..., description="Error message")
-    details: Optional[Dict[str, Any]] = Field(None, description="Additional error details")

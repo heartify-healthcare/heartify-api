@@ -1,32 +1,29 @@
+"""
+Main application factory module.
+"""
 from flask import Flask
-from app.config import config_by_name
-import os
+from app.config import Config
+from app.routes import register_routes
 
-def create_app(config_name='dev'):
+def create_app(config_class=Config):
     """
-    Factory function to create and configure the Flask application.
+    Application factory that creates and configures a Flask application.
     
     Args:
-        config_name: Configuration to use ('dev', 'prod', 'test')
+        config_class: Configuration class to use for the application.
         
     Returns:
-        Configured Flask application
+        Flask application instance.
     """
     app = Flask(__name__)
+    app.config.from_object(config_class)
     
-    # Load configuration
-    app.config.from_object(config_by_name[config_name])
-    
-    # Create model directory if it doesn't exist
-    os.makedirs('models', exist_ok=True)
-    
-    # Import and register blueprints
-    from app.routes import register_routes
+    # Register all routes and blueprints
     register_routes(app)
     
-    @app.route('/health', methods=['GET'])
+    @app.route('/health')
     def health_check():
-        """Simple health check endpoint."""
-        return {'status': 'healthy'}, 200
+        """Basic health check endpoint"""
+        return {'status': 'ok'}
     
     return app
