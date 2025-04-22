@@ -11,5 +11,5 @@ class Config:
     DEBUG = os.environ.get('DEBUG', 'False').lower() == 'true'
     
     # Model paths
-    MODEL_PATH = os.environ.get('MODEL_PATH', 'heart_cnn_lstm_model.keras')
-    SCALER_PATH = os.environ.get('SCALER_PATH', 'scaler.save')
+    MODEL_PATH = os.environ.get('MODEL_PATH', './model/heart_cnn_lstm_model.keras')
+    SCALER_PATH = os.environ.get('SCALER_PATH', './model/scaler.save')

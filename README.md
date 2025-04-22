@@ -23,17 +23,17 @@ Health metrics expected (in JSON format):
 
 ```json
 {
-  "age": 45,
-  "gender": 1,
-  "height": 165,
-  "weight": 72,
-  "ap_hi": 120,
-  "ap_lo": 80,
-  "cholesterol": 1,
-  "gluc": 1,
-  "smoke": 0,
-  "alco": 0,
-  "active": 1
+  "age": 18,
+  "sex": 1,
+  "cp": 4,
+  "trestbps": 80,
+  "chol": 246,
+  "fbs": 0,
+  "restecg": 1,
+  "thalach": 82,
+  "exang": 1,
+  "oldpeak": 4.0,
+  "slope": 2
 }
 ```
 
@@ -52,21 +52,27 @@ cd flask-cardiovascular-disease
 pip install -r requirements.txt
 ```
 
-Make sure the trained `.keras` model file is placed in the appropriate directory (usually `models/` or root).
+### Train the CNN-LSTM model
+
+```bash
+python model/train.py
+```
+
+Make sure the trained `.keras` model and the `scaler.save` file is placed in the appropriate directory (usually `model`) after completing the training progress.
 
 ### Running the Server
 
 ```bash
-python app.py
+python manage.py run
 ```
 
 The API will be available at:  
-`http://127.0.0.1:5000/api/predict`
+`http://127.0.0.1:5000/api/prediction/heart-disease`
 
 ### Sample Prediction Request (with `curl`)
 
 ```bash
-curl -X POST http://127.0.0.1:5000/api/predict \
+curl -X POST http://127.0.0.1:5000/api/prediction/heart-disease \
      -H "Content-Type: application/json" \
      -d @sample_data.json
 ```
@@ -75,7 +81,7 @@ curl -X POST http://127.0.0.1:5000/api/predict \
 
 - Architecture: **CNN + LSTM hybrid model**
 - Trained on a cardiovascular dataset with preprocessed and normalized input features
-- Output: `{"has_disease": true/false}`
+- Sample output: `{ "prediction": "POSITIVE", "probability": 0.9983527064323425 }`
 
 ## 🔗 Frontend Integration
 

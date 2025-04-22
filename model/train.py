@@ -9,7 +9,7 @@ from tensorflow.keras.layers import Conv1D, MaxPooling1D, Flatten, LSTM, Dense, 
 import joblib
 
 # Đọc dữ liệu
-df = pd.read_csv("/content/drive/MyDrive/NT114.P21/MainModel/heart_statlog_cleveland_hungary_final.csv")
+df = pd.read_csv("./model/heart_statlog_cleveland_hungary_final.csv")
 
 # Tách input (X) và label (y)
 X = df.drop(columns=["target"]).values  # target là nhãn bệnh tim
@@ -19,7 +19,7 @@ df.head
 # Chuẩn hóa
 scaler = StandardScaler()
 X_scaled = scaler.fit_transform(X)
-joblib.dump(scaler, "scaler.save")
+joblib.dump(scaler, "./model/scaler.save")
 # Reshape thành (samples, timesteps, features)
 X_reshaped = X_scaled.reshape((X_scaled.shape[0], X_scaled.shape[1], 1))
 
@@ -49,30 +49,4 @@ y_pred_classes = (y_pred > 0.5).astype("int32")
 print("Accuracy:", accuracy_score(y_test, y_pred_classes))
 print("Classification Report:\n", classification_report(y_test, y_pred_classes))
 
-model.save("heart_cnn_lstm_model.keras")
-
-import numpy as np
-import joblib
-from tensorflow.keras.models import load_model
-
-# Load model đã huấn luyện
-model = load_model("/content/heart_cnn_lstm_model.keras")
-
-# Load scaler đã được fit trên dữ liệu train
-scaler = joblib.load("/content/scaler.save")
-
-# Dữ liệu mẫu (phải đúng thứ tự cột như trong dataset gốc)
-X = np.array([[52,1,4,160,246,0,1,82,1,4.0,2]])
-
-# Chuẩn hóa
-X_scaled = scaler.transform(X)
-
-# Reshape
-X_reshaped = X_scaled.reshape((1, X.shape[1], 1))
-
-# Dự đoán
-prediction = model.predict(X_reshaped)
-predicted_class = (prediction > 0.5).astype("int32")
-
-print("Xác suất bị bệnh tim:", prediction[0][0])
-print("Kết luận:", "CÓ BỆNH" if predicted_class[0][0] == 1 else "KHÔNG BỆNH")
+model.save("./model/heart_cnn_lstm_model.keras")
