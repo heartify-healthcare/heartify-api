@@ -17,6 +17,14 @@ class UserRepository:
 
     def get_by_email(self, email: str) -> Optional[User]:
         return self.db.query(User).filter(User.email == email).first()
+        
+    def get_by_username(self, username: str) -> Optional[User]:
+        return self.db.query(User).filter(User.username == username).first()
+        
+    def get_by_phonenumber(self, phonenumber: str) -> Optional[User]:
+        if phonenumber:
+            return self.db.query(User).filter(User.phonenumber == phonenumber).first()
+        return None
 
     def get_all(self) -> List[User]:
         return self.db.query(User).all()

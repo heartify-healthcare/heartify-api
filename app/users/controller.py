@@ -6,10 +6,17 @@ user_bp = Blueprint("user", __name__, url_prefix="/users")
 
 @user_bp.route("/", methods=["POST"])
 def create_user():
-    data = UserCreateSchema.parse_obj(request.json)
-    service = UserService(g.db)
-    user = service.create_user(data)
-    return jsonify(UserOutSchema.from_orm(user).dict()), 201
+    try:
+        data = UserCreateSchema.parse_obj(request.json)
+        service = UserService(g.db)
+        user, error = service.create_user(data)
+        
+        if error:
+            return jsonify(error), 400
+            
+        return jsonify(UserOutSchema.from_orm(user).dict()), 201
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
 
 @user_bp.route("/", methods=["GET"])
 def list_users():
@@ -27,12 +34,20 @@ def get_user(user_id):
 
 @user_bp.route("/<int:user_id>", methods=["PATCH"])
 def update_user(user_id):
-    data = UserUpdateSchema.parse_obj(request.json)
-    service = UserService(g.db)
-    user = service.update_user(user_id, data)
-    if not user:
-        return jsonify({"error": "User not found"}), 404
-    return jsonify(UserOutSchema.from_orm(user).dict()), 200
+    try:
+        data = UserUpdateSchema.parse_obj(request.json)
+        service = UserService(g.db)
+        user, error = service.update_user(user_id, data)
+        
+        if error:
+            return jsonify(error), 400
+            
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+            
+        return jsonify(UserOutSchema.from_orm(user).dict()), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
 
 @user_bp.route("/<int:user_id>", methods=["DELETE"])
 def delete_user(user_id):
