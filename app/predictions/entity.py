@@ -1,0 +1,26 @@
+from sqlalchemy import Column, Integer, String, Float, ForeignKey
+from sqlalchemy.orm import relationship
+from app.database import Base
+
+class Prediction(Base):
+    __tablename__ = "predictions"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, nullable=False)
+    
+    # Health metrics
+    age = Column(Integer, nullable=False)
+    sex = Column(Integer, nullable=False)
+    cp = Column(Integer, nullable=False)
+    trestbps = Column(Integer, nullable=False)
+    chol = Column(Integer, nullable=False)
+    fbs = Column(Integer, nullable=False)
+    restecg = Column(Integer, nullable=False)
+    thalach = Column(Integer, nullable=False)
+    exang = Column(Integer, nullable=False)
+    oldpeak = Column(Float, nullable=False)
+    slope = Column(Integer, nullable=False)
+    
+    # Prediction results
+    probability = Column(Float, nullable=False)
+    prediction = Column(String, nullable=False)
