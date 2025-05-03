@@ -3,6 +3,7 @@ from app.config import Config
 from app.routes import register_routes
 from app.database import Base, engine, get_db_connection
 from app.users.entity import User
+from app.predictions.entity import Prediction
 
 def create_app(config_class=Config):
     app = Flask(__name__)

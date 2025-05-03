@@ -1,7 +1,8 @@
 from pydantic import BaseModel, Field, validator
-from typing import List, Optional
+from typing import Optional
 
 class HeartDiseaseInput(BaseModel):
+    user_id: int = Field(..., description="ID of the user making the prediction")
     age: int = Field(..., ge=0, le=120, description="Age in years")
     sex: int = Field(..., ge=0, le=1, description="Sex (0 = female, 1 = male)")
     cp: int = Field(..., ge=0, le=4, description="Chest pain type (0-4)")
@@ -39,13 +40,44 @@ class HeartDiseaseInput(BaseModel):
         return v
 
 
-class PredictionResponse(BaseModel):    
+class PredictionResponse(BaseModel):
+    id: int
+    user_id: int
+    
+    # Health metrics
+    age: int
+    sex: int
+    cp: int
+    trestbps: int
+    chol: int
+    fbs: int
+    restecg: int
+    thalach: int
+    exang: int
+    oldpeak: float
+    slope: int
+    
+    # Prediction results
     probability: float = Field(..., ge=0.0, le=1.0, description="Probability of having heart disease")
     prediction: str = Field(..., description="Prediction result (POSITIVE or NEGATIVE)")
     
     class Config:
+        orm_mode = True
         schema_extra = {
             "example": {
+                "id": 1,
+                "user_id": 2,
+                "age": 45,
+                "sex": 1,
+                "cp": 3,
+                "trestbps": 120,
+                "chol": 210,
+                "fbs": 0,
+                "restecg": 0,
+                "thalach": 145,
+                "exang": 0,
+                "oldpeak": 1.5,
+                "slope": 2,
                 "probability": 0.75,
                 "prediction": "POSITIVE"
             }
