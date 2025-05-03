@@ -1,25 +1,9 @@
-"""
-Service layer for the prediction module.
-This layer contains the business logic for the prediction module.
-"""
 from typing import Dict, Any, List, Union
 from app.prediction.schema import HeartDiseaseInput
 from app.prediction.model import HeartDiseaseModel
 
 class PredictionService:
-    """Service for heart disease prediction."""
-    
-    @staticmethod
     def predict_heart_disease(input_data: HeartDiseaseInput) -> Dict[str, Any]:
-        """
-        Predict heart disease based on input data.
-        
-        Args:
-            input_data: Validated input data
-            
-        Returns:
-            Dictionary containing prediction results
-        """
         # Convert pydantic model to list of features in the correct order
         features = [
             input_data.age,

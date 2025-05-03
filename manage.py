@@ -1,7 +1,3 @@
-"""
-Management script for the application.
-Provides command-line utilities for managing the application.
-"""
 from flask import Flask
 from flask.cli import FlaskGroup
 from app import create_app

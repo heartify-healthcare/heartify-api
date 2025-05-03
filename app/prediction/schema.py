@@ -1,12 +1,7 @@
-"""
-Schemas for the prediction API data validation.
-"""
 from pydantic import BaseModel, Field, validator
 from typing import List, Optional
 
 class HeartDiseaseInput(BaseModel):
-    """Schema for heart disease prediction input data."""
-    
     age: int = Field(..., ge=0, le=120, description="Age in years")
     sex: int = Field(..., ge=0, le=1, description="Sex (0 = female, 1 = male)")
     cp: int = Field(..., ge=0, le=4, description="Chest pain type (0-4)")
@@ -44,9 +39,7 @@ class HeartDiseaseInput(BaseModel):
         return v
 
 
-class PredictionResponse(BaseModel):
-    """Schema for heart disease prediction response."""
-    
+class PredictionResponse(BaseModel):    
     probability: float = Field(..., ge=0.0, le=1.0, description="Probability of having heart disease")
     prediction: str = Field(..., description="Prediction result (POSITIVE or NEGATIVE)")
     

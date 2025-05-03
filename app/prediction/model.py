@@ -1,6 +1,3 @@
-"""
-Model implementation for heart disease prediction.
-"""
 import numpy as np
 from typing import List, Dict, Any, Tuple, Union
 import tensorflow as tf
@@ -9,12 +6,9 @@ from app.config import Config
 import os
 
 class HeartDiseaseModel:
-    """Heart disease prediction model handler."""
-    
     _instance = None
     
     def __new__(cls):
-        """Singleton pattern to ensure model is loaded only once."""
         if cls._instance is None:
             cls._instance = super(HeartDiseaseModel, cls).__new__(cls)
             cls._instance._model = None
@@ -22,7 +16,6 @@ class HeartDiseaseModel:
         return cls._instance
     
     def load(self) -> None:
-        """Load the model and scaler from disk."""
         if self._model is None:
             try:
                 self._model = tf.keras.models.load_model(Config.MODEL_PATH)
@@ -36,15 +29,6 @@ class HeartDiseaseModel:
                 raise RuntimeError(f"Failed to load scaler: {str(e)}")
     
     def preprocess(self, features: List[Union[int, float]]) -> np.ndarray:
-        """
-        Preprocess input features.
-        
-        Args:
-            features: List of input features
-            
-        Returns:
-            Preprocessed features ready for model prediction
-        """
         if self._scaler is None:
             self.load()
             
@@ -60,15 +44,6 @@ class HeartDiseaseModel:
         return X_reshaped
     
     def predict(self, features: List[Union[int, float]]) -> Tuple[float, str]:
-        """
-        Make a prediction with the heart disease model.
-        
-        Args:
-            features: List of input features
-            
-        Returns:
-            Tuple of (probability, prediction)
-        """
         if self._model is None:
             self.load()
         

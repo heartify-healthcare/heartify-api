@@ -1,3 +1,1 @@
-"""
-Prediction module initialization.
-"""
+from app.prediction.controller import prediction_bp
