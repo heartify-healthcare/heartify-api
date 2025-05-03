@@ -3,8 +3,8 @@ Service layer for the prediction module.
 This layer contains the business logic for the prediction module.
 """
 from typing import Dict, Any, List, Union
-from app.prediction.interface import PredictionInterface
 from app.prediction.schema import HeartDiseaseInput
+from app.prediction.model import HeartDiseaseModel
 
 class PredictionService:
     """Service for heart disease prediction."""
@@ -35,7 +35,10 @@ class PredictionService:
             input_data.slope
         ]
         
-        # Make prediction using the interface
-        result = PredictionInterface.predict(features)
+        model = HeartDiseaseModel()
+        probability, prediction = model.predict(features)
         
-        return result
+        return {
+            "probability": probability,
+            "prediction": prediction
+        }
