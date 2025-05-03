@@ -17,7 +17,7 @@ class UserService:
         if self.repo.get_by_email(data.email):
             return None, {"error": "Email already exists"}
             
-        # Check if phonenumber already exists (if provided)
+        # Check if phonenumber already exists
         if data.phonenumber and self.repo.get_by_phonenumber(data.phonenumber):
             return None, {"error": "Phone number already exists"}
         
@@ -25,8 +25,8 @@ class UserService:
             username=data.username,
             email=data.email,
             phonenumber=data.phonenumber,
-            password=data.password,  # NOTE: You should hash this in real apps!
-            role=data.role  # Use the role from the schema
+            password=data.password,  # NOTE: this one will be hashed using bcrypt later
+            role=data.role
         )
         return self.repo.create(user), None
 

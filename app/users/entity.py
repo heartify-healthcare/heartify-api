@@ -5,9 +5,9 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    username = Column(String, nullable=False, unique=True)  # Added unique constraint
+    username = Column(String, nullable=False, unique=True)
     email = Column(String, unique=True, nullable=False)
-    phonenumber = Column(String, nullable=True, unique=True)  # Added unique constraint
+    phonenumber = Column(String, nullable=True, unique=True)
     password = Column(String, nullable=False)
-    is_verified = Column(Boolean, default=False)
-    role = Column(String, nullable=False, default="user")  # Added role field with default value
+    is_verified = Column(Boolean, default=False) # default is not verified
+    role = Column(String, nullable=False, default="user") # default is user

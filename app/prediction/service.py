@@ -3,7 +3,6 @@ from app.prediction.schema import HeartDiseaseInput
 from app.prediction.model import HeartDiseaseModel
 
 class PredictionService:
-    @staticmethod
     def predict_heart_disease(input_data: HeartDiseaseInput) -> Dict[str, Any]:
         # Convert pydantic model to list of features in the correct order
         features = [

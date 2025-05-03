@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify, g
 from app.users.service import UserService
 from app.users.schema import UserCreateSchema, UserOutSchema, UserUpdateSchema
 
-user_bp = Blueprint("user", __name__, url_prefix="/users")
+user_bp = Blueprint("user", __name__)
 
 @user_bp.route("/", methods=["POST"])
 def create_user():

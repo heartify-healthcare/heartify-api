@@ -6,14 +6,14 @@ class UserCreateSchema(BaseModel):
     email: EmailStr
     phonenumber: Optional[str] = None
     password: constr(min_length=6)
-    role: Optional[str] = "user"  # Added role field with default value
+    role: Optional[str] = "user"  # role field with default value
 
 class UserUpdateSchema(BaseModel):
     username: Optional[str]
     email: Optional[EmailStr]
     phonenumber: Optional[str]
     is_verified: Optional[bool]
-    role: Optional[str]  # Added role field
+    role: Optional[str]
 
 class UserOutSchema(BaseModel):
     id: int
@@ -21,7 +21,7 @@ class UserOutSchema(BaseModel):
     email: EmailStr
     phonenumber: Optional[str]
     is_verified: bool
-    role: str  # Added role field
+    role: str
 
     class Config:
         orm_mode = True
