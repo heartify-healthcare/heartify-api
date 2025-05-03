@@ -1,7 +1,3 @@
-"""
-Controller layer for the prediction module.
-This layer handles HTTP requests and responses.
-"""
 from flask import Blueprint, request, jsonify
 from pydantic import ValidationError
 from app.prediction.schema import HeartDiseaseInput, PredictionResponse
@@ -12,11 +8,6 @@ prediction_bp = Blueprint('prediction', __name__)
 
 @prediction_bp.route('/heart-disease', methods=['POST'])
 def predict_heart_disease():
-    """
-    Heart disease prediction endpoint.
-    
-    Accepts POST requests with input features and returns prediction results.
-    """
     try:
         # Parse and validate input data
         request_data = request.get_json()
