@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from typing import Optional, List
-from app.prediction.entity import Prediction
+from app.predictions.entity import Prediction
 
 class PredictionRepository:
     def __init__(self, db: Session):

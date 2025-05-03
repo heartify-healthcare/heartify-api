@@ -43,6 +43,21 @@ class HeartDiseaseInput(BaseModel):
 class PredictionResponse(BaseModel):
     id: int
     user_id: int
+    
+    # Health metrics
+    age: int
+    sex: int
+    cp: int
+    trestbps: int
+    chol: int
+    fbs: int
+    restecg: int
+    thalach: int
+    exang: int
+    oldpeak: float
+    slope: int
+    
+    # Prediction results
     probability: float = Field(..., ge=0.0, le=1.0, description="Probability of having heart disease")
     prediction: str = Field(..., description="Prediction result (POSITIVE or NEGATIVE)")
     
@@ -52,6 +67,17 @@ class PredictionResponse(BaseModel):
             "example": {
                 "id": 1,
                 "user_id": 2,
+                "age": 45,
+                "sex": 1,
+                "cp": 3,
+                "trestbps": 120,
+                "chol": 210,
+                "fbs": 0,
+                "restecg": 0,
+                "thalach": 145,
+                "exang": 0,
+                "oldpeak": 1.5,
+                "slope": 2,
                 "probability": 0.75,
                 "prediction": "POSITIVE"
             }

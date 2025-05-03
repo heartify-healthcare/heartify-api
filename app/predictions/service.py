@@ -1,9 +1,9 @@
 from sqlalchemy.orm import Session
 from typing import Dict, Any, List, Union, Tuple, Optional
-from app.prediction.schema import HeartDiseaseInput
-from app.prediction.model import HeartDiseaseModel
-from app.prediction.entity import Prediction
-from app.prediction.repository import PredictionRepository
+from app.predictions.schema import HeartDiseaseInput
+from app.predictions.model import HeartDiseaseModel
+from app.predictions.entity import Prediction
+from app.predictions.repository import PredictionRepository
 from app.users.repository import UserRepository
 
 class PredictionService:
@@ -11,7 +11,7 @@ class PredictionService:
         self.repo = PredictionRepository(db)
         self.user_repo = UserRepository(db)
 
-    def predict_heart_disease(self, input_data: HeartDiseaseInput) -> Tuple[Optional[Dict[str, Any]], Optional[Dict[str, str]]]:
+    def predict_heart_disease(self, input_data: HeartDiseaseInput) -> Tuple[Optional[Prediction], Optional[Dict[str, str]]]:
         # Check if user exists
         user = self.user_repo.get_by_id(input_data.user_id)
         if not user:
@@ -38,18 +38,24 @@ class PredictionService:
         # Create prediction record in database
         prediction = Prediction(
             user_id=input_data.user_id,
+            age=input_data.age,
+            sex=input_data.sex,
+            cp=input_data.cp,
+            trestbps=input_data.trestbps,
+            chol=input_data.chol,
+            fbs=input_data.fbs,
+            restecg=input_data.restecg,
+            thalach=input_data.thalach,
+            exang=input_data.exang,
+            oldpeak=input_data.oldpeak,
+            slope=input_data.slope,
             probability=probability,
             prediction=prediction_result
         )
         
         created_prediction = self.repo.create(prediction)
         
-        return {
-            "id": created_prediction.id,
-            "user_id": created_prediction.user_id,
-            "probability": created_prediction.probability,
-            "prediction": created_prediction.prediction
-        }, None
+        return created_prediction, None
         
     def get_prediction(self, prediction_id: int) -> Optional[Prediction]:
         return self.repo.get_by_id(prediction_id)
