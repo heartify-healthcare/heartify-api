@@ -98,6 +98,17 @@ def get_user_predictions(user_id):
         response = PredictionResponse(
             id=p.id,
             user_id=p.user_id,
+            age=p.age,
+            sex=p.sex,
+            cp=p.cp,
+            trestbps=p.trestbps,
+            chol=p.chol,
+            fbs=p.fbs,
+            restecg=p.restecg,
+            thalach=p.thalach,
+            exang=p.exang,
+            oldpeak=p.oldpeak,
+            slope=p.slope,
             probability=p.probability,
             prediction=p.prediction
         )
