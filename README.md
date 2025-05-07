@@ -23,6 +23,7 @@ Health metrics expected (in JSON format):
 
 ```json
 {
+  "user_id": 2
   "age": 18,
   "sex": 1,
   "cp": 4,
@@ -67,12 +68,12 @@ python manage.py run
 ```
 
 The API will be available at:  
-`http://127.0.0.1:5000/api/prediction/heart-disease`
+`http://127.0.0.1:5000/predictions/heart-disease`
 
 ### Sample Prediction Request (with `curl`)
 
 ```bash
-curl -X POST http://127.0.0.1:5000/api/prediction/heart-disease \
+curl -X POST http://127.0.0.1:5000/predictions/heart-disease \
      -H "Content-Type: application/json" \
      -d @sample_data.json
 ```
@@ -86,7 +87,7 @@ curl -X POST http://127.0.0.1:5000/api/prediction/heart-disease \
 ## 🔗 Frontend Integration
 
 This API is used by the mobile frontend built with React Native & Expo.  
-👉 Mobile App Repository: [https://github.com/votranphi/react-native-cardiovascular-disease](https://github.com/votranphi/react-native-cardiovascular-disease)
+👉 Mobile App Repository: [https://github.com/votranphi/heartify](https://github.com/votranphi/heartify)
 
 ## 📚 Academic Context
 
