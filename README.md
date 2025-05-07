@@ -1,6 +1,6 @@
 # Cardiovascular Disease Detection API (Flask)
 
-This repository contains the **Flask-based REST API** component of a university capstone project. The API serves as a backend for receiving health metrics from a mobile application and uses a deep learning model (CNN + LSTM) to predict the likelihood of **cardiovascular disease (CVD)**.
+This repository contains the **Flask-based REST API** component of a university capstone project. The API serves as a backend for receiving health metrics from a mobile application (Heartify) and uses a deep learning model (CNN + LSTM) to predict the likelihood of **cardiovascular disease (CVD)**.
 
 ## 🧠 How It Works
 
@@ -47,8 +47,8 @@ Health metrics expected (in JSON format):
 ### Installation
 
 ```bash
-git clone https://github.com/votranphi/flask-cardiovascular-disease
-cd flask-cardiovascular-disease
+git clone https://github.com/votranphi/heartify-api
+cd heartify-api
 pip install -r requirements.txt
 ```
 
