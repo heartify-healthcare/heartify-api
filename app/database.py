@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 import os
 
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://cardiovas:cardiovas@localhost:5432/cardiovas")
+DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://heartify:heartify@localhost:5432/heartify")
 
 engine = create_engine(DATABASE_URL)
 
