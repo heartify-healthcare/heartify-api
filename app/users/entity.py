@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String, Boolean
+from sqlalchemy.orm import relationship
 from app.database import Base
 
 class User(Base):
@@ -11,3 +12,6 @@ class User(Base):
     password = Column(String, nullable=False)
     is_verified = Column(Boolean, default=False) # default is not verified
     role = Column(String, nullable=False, default="user") # default is user
+    
+    # Relationship to OTP (defined in auth module)
+    otps = relationship("OTP", back_populates="user")
