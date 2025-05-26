@@ -14,4 +14,4 @@ class User(Base):
     role = Column(String, nullable=False, default="user") # default is user
     
     # Relationship to OTP (defined in auth module)
-    otps = relationship("OTP", back_populates="user")
+    otps = relationship("OTP", back_populates="user", cascade="all, delete-orphan")
