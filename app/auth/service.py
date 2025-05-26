@@ -77,7 +77,13 @@ class AuthService:
             "role": user.role,
             "exp": int(time.time()) + self.jwt_expiration
         }
-        return jwt.encode(payload, self.jwt_secret, algorithm=self.jwt_algorithm)
+        token = jwt.encode(payload, self.jwt_secret, algorithm=self.jwt_algorithm)
+        
+        # Ensure token is a string (decode if it's bytes)
+        if isinstance(token, bytes):
+            token = token.decode('utf-8')
+        
+        return token
 
     def register(self, data: RegisterSchema) -> Tuple[Optional[Dict[str, Any]], Optional[Dict[str, str]]]:
         """Register a new user"""

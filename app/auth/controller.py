@@ -76,7 +76,7 @@ def verify():
 
 @auth_bp.route("/login", methods=["POST"])
 def login():
-    try:
+    # try:
         data = LoginSchema.parse_obj(request.json)
         service = AuthService(g.db)
         result, error = service.login(data)
@@ -85,8 +85,8 @@ def login():
             return jsonify(error), 400
             
         return jsonify(result), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 400
+    # except Exception as e:
+        # return jsonify({"error": str(e)}), 400
 
 # Test endpoint to verify JWT token
 @auth_bp.route("/me", methods=["GET"])
