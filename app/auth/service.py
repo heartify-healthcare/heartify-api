@@ -9,6 +9,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import os
+from app.config import Config
 
 from app.auth.repository import OTPRepository
 from app.auth.entity import OTP
@@ -20,7 +21,7 @@ class AuthService:
     def __init__(self, db: Session):
         self.otp_repo = OTPRepository(db)
         self.user_repo = UserRepository(db)
-        self.jwt_secret = os.getenv("JWT_SECRET", "your-secret-key")
+        self.jwt_secret = Config.JWT_SECRET
         self.jwt_algorithm = "HS256"
         self.jwt_expiration = 3600 * 24  # 24 hours
         self.otp_expiration = 300  # 5 minutes
@@ -42,10 +43,10 @@ class AuthService:
         """Send email (implement based on your email service)"""
         try:
             # Configure your email settings
-            smtp_server = os.getenv("SMTP_SERVER", "smtp.gmail.com")
-            smtp_port = int(os.getenv("SMTP_PORT", "587"))
-            smtp_username = os.getenv("SMTP_USERNAME")
-            smtp_password = os.getenv("SMTP_PASSWORD")
+            smtp_server = Config.SMTP_SERVER
+            smtp_port = Config.SMTP_PORT
+            smtp_username = Config.SMTP_USERNAME
+            smtp_password = Config.SMTP_PASSWORD
             
             if not smtp_username or not smtp_password:
                 print("Email credentials not configured")
