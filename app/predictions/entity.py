@@ -6,7 +6,7 @@ class Prediction(Base):
     __tablename__ = "predictions"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    user_id = Column(Integer, nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     
     # Health metrics
     age = Column(Integer, nullable=False)
@@ -24,3 +24,6 @@ class Prediction(Base):
     # Prediction results
     probability = Column(Float, nullable=False)
     prediction = Column(String, nullable=False)
+    
+    # Relationship to User
+    user = relationship("User", back_populates="predictions")

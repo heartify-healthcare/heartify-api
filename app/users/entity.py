@@ -15,3 +15,6 @@ class User(Base):
     
     # Relationship to OTP (defined in auth module)
     otps = relationship("OTP", back_populates="user", cascade="all, delete-orphan")
+    
+    # Relationship to Prediction
+    predictions = relationship("Prediction", back_populates="user", cascade="all, delete-orphan")
