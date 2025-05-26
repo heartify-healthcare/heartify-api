@@ -188,13 +188,13 @@ class AuthService:
 
     def login(self, data: LoginSchema) -> Tuple[Optional[Dict[str, Any]], Optional[Dict[str, str]]]:
         """Login user and return JWT token"""
-        user = self.user_repo.get_by_email(data.email)
+        user = self.user_repo.get_by_username(data.username)
         if not user:
-            return None, {"error": "Invalid email or password"}
+            return None, {"error": "Invalid username or password"}
         
         # Check password
         if not self._verify_password(data.password, user.password):
-            return None, {"error": "Invalid email or password"}
+            return None, {"error": "Invalid username or password"}
         
         # Check if user is verified
         if not user.is_verified:

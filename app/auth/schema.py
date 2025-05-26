@@ -15,7 +15,7 @@ class VerifySchema(BaseModel):
     otp_code: constr(min_length=6, max_length=6)
 
 class LoginSchema(BaseModel):
-    email: EmailStr
+    username: str
     password: str
 
 class LoginResponseSchema(BaseModel):
