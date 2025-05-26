@@ -1,5 +1,6 @@
-from sqlalchemy import Column, Integer, String, Float, ForeignKey
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
+from sqlalchemy.sql import func
 from app.database import Base
 
 class Prediction(Base):
@@ -24,6 +25,7 @@ class Prediction(Base):
     # Prediction results
     probability = Column(Float, nullable=False)
     prediction = Column(String, nullable=False)
+    created_at = Column(DateTime, default=func.now(), nullable=False)
     
     # Relationship to User
     user = relationship("User", back_populates="predictions")

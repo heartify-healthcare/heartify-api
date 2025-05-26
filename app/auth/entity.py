@@ -1,5 +1,6 @@
-from sqlalchemy import Column, Integer, String, Boolean, BigInteger, ForeignKey
+from sqlalchemy import Column, Integer, String, Boolean, BigInteger, ForeignKey, DateTime
 from sqlalchemy.orm import relationship
+from sqlalchemy.sql import func
 from app.database import Base
 
 class OTP(Base):
@@ -10,6 +11,7 @@ class OTP(Base):
     otp_code = Column(String, nullable=False)
     expired_time = Column(BigInteger, nullable=False)  # UNIX timestamp
     otp_used = Column(Boolean, default=False)
+    created_at = Column(DateTime, default=func.now(), nullable=False)
     
     # Relationship to User
     user = relationship("User", back_populates="otps")
