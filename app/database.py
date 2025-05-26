@@ -1,10 +1,9 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 import os
+from app.config import Config
 
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://heartify:heartify@localhost:5432/heartify")
-
-engine = create_engine(DATABASE_URL)
+engine = create_engine(Config.SQLALCHEMY_DATABASE_URI)
 
 SessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
 

@@ -2,7 +2,6 @@ from pydantic import BaseModel, Field, validator
 from typing import Optional
 
 class HeartDiseaseInput(BaseModel):
-    user_id: int = Field(..., description="ID of the user making the prediction")
     age: int = Field(..., ge=0, le=120, description="Age in years")
     sex: int = Field(..., ge=0, le=1, description="Sex (0 = female, 1 = male)")
     cp: int = Field(..., ge=0, le=4, description="Chest pain type (0-4)")

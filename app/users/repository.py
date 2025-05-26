@@ -37,3 +37,11 @@ class UserRepository:
     def delete(self, user: User) -> None:
         self.db.delete(user)
         self.db.commit()
+
+    def get_verified_users_only(self) -> List[User]:
+        """Get only verified users - useful for admin operations"""
+        return self.db.query(User).filter(User.is_verified == True).all()
+
+    def get_users_by_role(self, role: str) -> List[User]:
+        """Get users by role - useful for role-based operations"""
+        return self.db.query(User).filter(User.role == role).all()
