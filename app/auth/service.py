@@ -10,6 +10,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import os
 from app.config import Config
+from pathlib import Path
 
 from app.auth.repository import OTPRepository
 from app.auth.entity import OTP
@@ -39,7 +40,7 @@ class AuthService:
         """Generate 6-digit OTP"""
         return ''.join(random.choices(string.digits, k=6))
 
-    def _send_email(self, to_email: str, subject: str, body: str) -> bool:
+    def _send_email(self, to_email: str, subject: str, body: str, is_html: bool = False) -> bool:
         """Send email (implement based on your email service)"""
         try:
             # Configure your email settings
@@ -56,7 +57,10 @@ class AuthService:
             msg['From'] = smtp_username
             msg['To'] = to_email
             msg['Subject'] = subject
-            msg.attach(MIMEText(body, 'plain'))
+            
+            # Attach body with appropriate content type
+            content_type = 'html' if is_html else 'plain'
+            msg.attach(MIMEText(body, content_type))
 
             server = smtplib.SMTP(smtp_server, smtp_port)
             server.starttls()
@@ -140,19 +144,20 @@ class AuthService:
         )
         self.otp_repo.create(otp)
         
+        # Load HTML template
+        template_path = Path(__file__).parent / "templates" / "otp.html"
+        
+        with open(template_path, 'r', encoding='utf-8') as file:
+            html_body = file.read()
+        
+        # Replace placeholders
+        html_body = html_body.replace("{{ username }}", user.username)
+        html_body = html_body.replace("{{ otp }}", otp_code)
+        
         # Send email
         subject = "Verify Your Account"
-        body = f"""
-        Hello {user.username},
         
-        Your verification code is: {otp_code}
-        
-        This code will expire in 5 minutes.
-        
-        If you didn't request this code, please ignore this email.
-        """
-        
-        return self._send_email(user.email, subject, body)
+        return self._send_email(user.email, subject, html_body, is_html=True)
 
     def request_verify(self, data: RequestVerifySchema) -> Tuple[Optional[Dict[str, str]], Optional[Dict[str, str]]]:
         """Send verification OTP to user's email"""
