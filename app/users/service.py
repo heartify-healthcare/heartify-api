@@ -3,7 +3,7 @@ from typing import Optional, List, Dict, Any, Tuple
 import bcrypt
 from app.users.repository import UserRepository
 from app.users.entity import User
-from app.users.schema import UserCreateSchema, UserUpdateSchema
+from app.users.schema import UserCreateSchema, UserUpdateSchema, UserHealthUpdateSchema
 
 class UserService:
     def __init__(self, db: Session):
@@ -41,7 +41,13 @@ class UserService:
             phonenumber=data.phonenumber,
             password=hashed_password,
             role=data.role,
-            is_verified=True  # Admin-created users are automatically verified
+            is_verified=True,  # Admin-created users are automatically verified
+            # Health fields default to None
+            age=None,
+            sex=None,
+            cp=None,
+            trestbps=None,
+            exang=None
         )
         return self.repo.create(user), None
 
@@ -79,6 +85,20 @@ class UserService:
             update_data["password"] = self._hash_password(update_data["password"])
         
         # Apply updates
+        for key, value in update_data.items():
+            setattr(user, key, value)
+            
+        return self.repo.update(user), None
+
+    def update_user_health(self, user_id: int, data: UserHealthUpdateSchema) -> Tuple[Optional[User], Optional[Dict[str, str]]]:
+        """Update user health fields only"""
+        user = self.repo.get_by_id(user_id)
+        if not user:
+            return None, {"error": "User not found"}
+            
+        update_data = data.dict(exclude_unset=True)
+        
+        # Apply health field updates
         for key, value in update_data.items():
             setattr(user, key, value)
             
@@ -132,11 +152,13 @@ class UserService:
         all_users = self.repo.get_all()
         verified_users = [u for u in all_users if u.is_verified]
         admin_users = [u for u in all_users if u.role == 'admin']
+        users_with_health_data = self.repo.get_users_with_health_data()
         
         return {
             "total_users": len(all_users),
             "verified_users": len(verified_users),
             "unverified_users": len(all_users) - len(verified_users),
             "admin_users": len(admin_users),
-            "regular_users": len(all_users) - len(admin_users)
+            "regular_users": len(all_users) - len(admin_users),
+            "users_with_health_data": len(users_with_health_data)
         }

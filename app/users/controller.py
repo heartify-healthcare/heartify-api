@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify, g
 from app.users.service import UserService
-from app.users.schema import UserCreateSchema, UserOutSchema, UserUpdateSchema
+from app.users.schema import UserCreateSchema, UserOutSchema, UserUpdateSchema, UserHealthUpdateSchema
 from app.auth.controller import jwt_required
 
 user_bp = Blueprint("users", __name__)
@@ -102,6 +102,27 @@ def update_current_user_profile():
         data = UserUpdateSchema.parse_obj(request.json)
         service = UserService(g.db)
         user, error = service.update_user(current_user_id, data, current_user_role)
+        
+        if error:
+            return jsonify(error), 400
+            
+        if not user:
+            return jsonify({"error": "User not found"}), 404
+            
+        return jsonify(UserOutSchema.from_orm(user).dict()), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+
+@user_bp.route("/profile/health", methods=["PATCH"])
+@jwt_required
+def update_current_user_health():
+    """Update current user's health-related fields only"""
+    current_user_id = g.current_user.get('user_id')
+    
+    try:
+        data = UserHealthUpdateSchema.parse_obj(request.json)
+        service = UserService(g.db)
+        user, error = service.update_user_health(current_user_id, data)
         
         if error:
             return jsonify(error), 400

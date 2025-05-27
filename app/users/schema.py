@@ -8,7 +8,8 @@ class UserCreateSchema(BaseModel):
     phonenumber: Optional[str] = None
     password: constr(min_length=6)
     role: Optional[str] = "user"  # role field with default value
-
+    # Health fields are not included in create - they default to None
+    
     @validator('role')
     def validate_role(cls, v):
         allowed_roles = ['user', 'admin']
@@ -29,6 +30,12 @@ class UserUpdateSchema(BaseModel):
     password: Optional[constr(min_length=6)] = None  # Allow password updates
     is_verified: Optional[bool] = None
     role: Optional[str] = None
+    # Health-related fields
+    age: Optional[int] = None
+    sex: Optional[int] = None
+    cp: Optional[int] = None
+    trestbps: Optional[int] = None
+    exang: Optional[int] = None
 
     @validator('role')
     def validate_role(cls, v):
@@ -44,6 +51,36 @@ class UserUpdateSchema(BaseModel):
             return None  # Convert empty strings to None
         return v
 
+    @validator('age')
+    def validate_age(cls, v):
+        if v is not None and (v < 0 or v > 150):
+            raise ValueError('Age must be between 0 and 150')
+        return v
+
+    @validator('sex')
+    def validate_sex(cls, v):
+        if v is not None and v not in [0, 1]:
+            raise ValueError('Sex must be 0 or 1')
+        return v
+
+    @validator('cp')
+    def validate_cp(cls, v):
+        if v is not None and v not in [0, 1, 2, 3]:
+            raise ValueError('CP must be 0, 1, 2, or 3')
+        return v
+
+    @validator('trestbps')
+    def validate_trestbps(cls, v):
+        if v is not None and (v < 50 or v > 300):
+            raise ValueError('Trestbps must be between 50 and 300')
+        return v
+
+    @validator('exang')
+    def validate_exang(cls, v):
+        if v is not None and v not in [0, 1]:
+            raise ValueError('Exang must be 0 or 1')
+        return v
+
 class UserOutSchema(BaseModel):
     id: int
     username: str
@@ -51,7 +88,13 @@ class UserOutSchema(BaseModel):
     phonenumber: Optional[str]
     is_verified: bool
     role: str
-    created_at: datetime  # Added created_at field
+    created_at: datetime
+    # Health-related fields
+    age: Optional[int] = None
+    sex: Optional[int] = None
+    cp: Optional[int] = None
+    trestbps: Optional[int] = None
+    exang: Optional[int] = None
 
     class Config:
         orm_mode = True
@@ -66,4 +109,42 @@ class UserProfileSchema(BaseModel):
     def validate_phonenumber(cls, v):
         if v is not None and len(v.strip()) == 0:
             return None  # Convert empty strings to None
+        return v
+
+class UserHealthUpdateSchema(BaseModel):
+    """Schema for updating only health-related fields"""
+    age: Optional[int] = None
+    sex: Optional[int] = None
+    cp: Optional[int] = None
+    trestbps: Optional[int] = None
+    exang: Optional[int] = None
+
+    @validator('age')
+    def validate_age(cls, v):
+        if v is not None and (v < 0 or v > 150):
+            raise ValueError('Age must be between 0 and 150')
+        return v
+
+    @validator('sex')
+    def validate_sex(cls, v):
+        if v is not None and v not in [0, 1]:
+            raise ValueError('Sex must be 0 or 1')
+        return v
+
+    @validator('cp')
+    def validate_cp(cls, v):
+        if v is not None and v not in [0, 1, 2, 3]:
+            raise ValueError('CP must be 0, 1, 2, or 3')
+        return v
+
+    @validator('trestbps')
+    def validate_trestbps(cls, v):
+        if v is not None and (v < 50 or v > 300):
+            raise ValueError('Trestbps must be between 50 and 300')
+        return v
+
+    @validator('exang')
+    def validate_exang(cls, v):
+        if v is not None and v not in [0, 1]:
+            raise ValueError('Exang must be 0 or 1')
         return v
