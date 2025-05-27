@@ -34,7 +34,8 @@ def predict_heart_disease():
             oldpeak=prediction.oldpeak,
             slope=prediction.slope,
             probability=prediction.probability,
-            prediction=prediction.prediction
+            prediction=prediction.prediction,
+            created_at=prediction.created_at
         )
             
         return jsonify(response.dict()), 201
@@ -65,7 +66,8 @@ def list_predictions():
             oldpeak=p.oldpeak,
             slope=p.slope,
             probability=p.probability,
-            prediction=p.prediction
+            prediction=p.prediction,
+            created_at=p.created_at
         )
         result.append(response.dict())
     return jsonify(result), 200
@@ -99,7 +101,8 @@ def get_prediction(prediction_id):
         oldpeak=prediction.oldpeak,
         slope=prediction.slope,
         probability=prediction.probability,
-        prediction=prediction.prediction
+        prediction=prediction.prediction,
+        created_at=prediction.created_at
     )
     return jsonify(response.dict()), 200
 
@@ -133,7 +136,8 @@ def get_user_predictions(user_id):
             oldpeak=p.oldpeak,
             slope=p.slope,
             probability=p.probability,
-            prediction=p.prediction
+            prediction=p.prediction,
+            created_at=p.created_at
         )
         result.append(response.dict())
     return jsonify(result), 200
@@ -188,7 +192,8 @@ def get_all_predictions():
             oldpeak=p.oldpeak,
             slope=p.slope,
             probability=p.probability,
-            prediction=p.prediction
+            prediction=p.prediction,
+            created_at=p.created_at
         )
         result.append(response.dict())
     return jsonify(result), 200

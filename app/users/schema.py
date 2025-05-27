@@ -1,5 +1,6 @@
 from pydantic import BaseModel, EmailStr, constr, validator
 from typing import Optional
+from datetime import datetime
 
 class UserCreateSchema(BaseModel):
     username: constr(min_length=3)
@@ -50,6 +51,7 @@ class UserOutSchema(BaseModel):
     phonenumber: Optional[str]
     is_verified: bool
     role: str
+    created_at: datetime  # Added created_at field
 
     class Config:
         orm_mode = True

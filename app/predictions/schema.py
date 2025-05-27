@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field, validator
 from typing import Optional
+from datetime import datetime
 
 class HeartDiseaseInput(BaseModel):
     age: int = Field(..., ge=0, le=120, description="Age in years")
@@ -59,6 +60,7 @@ class PredictionResponse(BaseModel):
     # Prediction results
     probability: float = Field(..., ge=0.0, le=1.0, description="Probability of having heart disease")
     prediction: str = Field(..., description="Prediction result (POSITIVE or NEGATIVE)")
+    created_at: datetime = Field(..., description="Timestamp when the prediction was created")
     
     class Config:
         orm_mode = True
@@ -78,6 +80,7 @@ class PredictionResponse(BaseModel):
                 "oldpeak": 1.5,
                 "slope": 2,
                 "probability": 0.75,
-                "prediction": "POSITIVE"
+                "prediction": "POSITIVE",
+                "created_at": "2024-01-15T10:30:00"
             }
         }
