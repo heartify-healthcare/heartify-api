@@ -15,6 +15,13 @@ class User(Base):
     role = Column(String, nullable=False, default="user") # default is user
     created_at = Column(DateTime, default=func.now(), nullable=False)
     
+    # New health-related fields (optional)
+    age = Column(Integer, nullable=True, default=None)
+    sex = Column(Integer, nullable=True, default=None)
+    cp = Column(Integer, nullable=True, default=None)
+    trestbps = Column(Integer, nullable=True, default=None)
+    exang = Column(Integer, nullable=True, default=None)
+    
     # Relationship to OTP (defined in auth module)
     otps = relationship("OTP", back_populates="user", cascade="all, delete-orphan")
     
