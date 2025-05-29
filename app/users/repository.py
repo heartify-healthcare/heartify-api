@@ -49,7 +49,7 @@ class UserRepository:
     def get_users_with_health_data(self) -> List[User]:
         """Get users who have at least one health field populated"""
         return self.db.query(User).filter(
-            (User.age.isnot(None)) |
+            (User.dob.isnot(None)) |
             (User.sex.isnot(None)) |
             (User.cp.isnot(None)) |
             (User.trestbps.isnot(None)) |
