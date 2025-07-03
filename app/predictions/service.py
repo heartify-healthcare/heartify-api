@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from typing import Dict, Any, List, Union, Tuple, Optional
+from typing import Dict, List, Tuple, Optional
 import numpy as np
 from app.predictions.schema import HeartDiseaseInput
 from app.predictions.libs.heart_disease_model import HeartDiseaseModel

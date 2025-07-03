@@ -1,11 +1,6 @@
 import numpy as np
-import pandas as pd
 from scipy.signal import find_peaks, butter, filtfilt
-from scipy.stats import zscore
-import matplotlib.pyplot as plt
-from sklearn.preprocessing import StandardScaler
 import warnings
-import json
 warnings.filterwarnings('ignore')
 
 class ECGClassifier:

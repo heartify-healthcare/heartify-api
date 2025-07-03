@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field, validator
-from typing import Optional, List
+from typing import List
 from datetime import datetime
 
 class HeartDiseaseInput(BaseModel):
