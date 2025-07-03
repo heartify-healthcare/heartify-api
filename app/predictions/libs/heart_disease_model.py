@@ -1,9 +1,8 @@
 import numpy as np
-from typing import List, Dict, Any, Tuple, Union
+from typing import List, Tuple, Union
 import tensorflow as tf
 import joblib
 from app.config import Config
-import os
 
 class HeartDiseaseModel:
     _instance = None
