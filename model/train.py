@@ -12,7 +12,7 @@ import joblib
 df = pd.read_csv("./model/heart_statlog_cleveland_hungary_final.csv")
 
 # Tách input (X) và label (y)
-X = df.drop(columns=["target"]).values  # target là nhãn bệnh tim
+X = df.drop(columns=["cholesterol", "fasting blood sugar", "oldpeak", "ST slope", "target"]).values  # target là nhãn bệnh tim
 y = df["target"].values
 
 df.head
