@@ -14,13 +14,9 @@ class Prediction(Base):
     sex = Column(Integer, nullable=False)
     cp = Column(Integer, nullable=False)
     trestbps = Column(Integer, nullable=False)
-    chol = Column(Integer, nullable=False)
-    fbs = Column(Integer, nullable=False)
     restecg = Column(Integer, nullable=False)
     thalach = Column(Integer, nullable=False)
     exang = Column(Integer, nullable=False)
-    oldpeak = Column(Float, nullable=False)
-    slope = Column(Integer, nullable=False)
     
     # Prediction results
     probability = Column(Float, nullable=False)

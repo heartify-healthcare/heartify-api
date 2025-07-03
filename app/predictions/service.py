@@ -23,13 +23,9 @@ class PredictionService:
             input_data.sex,
             input_data.cp,
             input_data.trestbps,
-            input_data.chol,
-            input_data.fbs,
             input_data.restecg,
             input_data.thalach,
-            input_data.exang,
-            input_data.oldpeak,
-            input_data.slope
+            input_data.exang
         ]
         
         try:
@@ -45,13 +41,9 @@ class PredictionService:
             sex=input_data.sex,
             cp=input_data.cp,
             trestbps=input_data.trestbps,
-            chol=input_data.chol,
-            fbs=input_data.fbs,
             restecg=input_data.restecg,
             thalach=input_data.thalach,
             exang=input_data.exang,
-            oldpeak=input_data.oldpeak,
-            slope=input_data.slope,
             probability=probability,
             prediction=prediction_result
         )
