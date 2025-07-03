@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from typing import Dict, Any, List, Union, Tuple, Optional
 from app.predictions.schema import HeartDiseaseInput
-from app.predictions.model import HeartDiseaseModel
+from app.predictions.libs.heart_disease_model import HeartDiseaseModel
 from app.predictions.entity import Prediction
 from app.predictions.repository import PredictionRepository
 from app.users.repository import UserRepository
