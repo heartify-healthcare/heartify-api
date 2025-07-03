@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field, validator
-from typing import Optional
+from typing import Optional, List
 from datetime import datetime
 
 class HeartDiseaseInput(BaseModel):
@@ -7,7 +7,7 @@ class HeartDiseaseInput(BaseModel):
     sex: int = Field(..., ge=0, le=1, description="Sex (0 = female, 1 = male)")
     cp: int = Field(..., ge=0, le=4, description="Chest pain type (0-4)")
     trestbps: int = Field(..., ge=0, description="Resting blood pressure (in mm Hg)")
-    restecg: int = Field(..., ge=0, le=2, description="Resting electrocardiographic results (0, 1, 2)")
+    ecg: List[int] = Field(..., description="ECG signal data as array of integers")
     thalach: int = Field(..., ge=0, description="Maximum heart rate achieved")
     exang: int = Field(..., ge=0, le=1, description="Exercise induced angina (1 = yes, 0 = no)")
     
@@ -27,6 +27,12 @@ class HeartDiseaseInput(BaseModel):
     def thalach_must_be_reasonable(cls, v):
         if v < 50 or v > 300:
             raise ValueError("Maximum heart rate should be between 50 and 300")
+        return v
+    
+    @validator('ecg')
+    def ecg_must_not_be_empty(cls, v):
+        if not v or len(v) == 0:
+            raise ValueError("ECG signal data cannot be empty")
         return v
 
 
