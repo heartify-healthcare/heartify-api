@@ -158,3 +158,7 @@ class UserHealthUpdateSchema(BaseModel):
         if v is not None and v not in [0, 1]:
             raise ValueError('Exang must be 0 or 1')
         return v
+
+class ChangePasswordSchema(BaseModel):
+    current_password: constr(min_length=1)
+    new_password: constr(min_length=6)
