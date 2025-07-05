@@ -70,8 +70,8 @@ class UserUpdateSchema(BaseModel):
 
     @validator('cp')
     def validate_cp(cls, v):
-        if v is not None and v not in [0, 1, 2, 3]:
-            raise ValueError('CP must be 0, 1, 2, or 3')
+        if v is not None and v not in [1, 2, 3, 4]:
+            raise ValueError('CP must be 1, 2, 3, or 4')
         return v
 
     @validator('trestbps')
@@ -143,8 +143,8 @@ class UserHealthUpdateSchema(BaseModel):
 
     @validator('cp')
     def validate_cp(cls, v):
-        if v is not None and v not in [0, 1, 2, 3]:
-            raise ValueError('CP must be 0, 1, 2, or 3')
+        if v is not None and v not in [1, 2, 3, 4]:
+            raise ValueError('CP must be 1, 2, 3, or 4')
         return v
 
     @validator('trestbps')

@@ -5,7 +5,7 @@ from datetime import datetime
 class HeartDiseaseInput(BaseModel):
     age: int = Field(..., ge=0, le=120, description="Age in years")
     sex: int = Field(..., ge=0, le=1, description="Sex (0 = female, 1 = male)")
-    cp: int = Field(..., ge=0, le=4, description="Chest pain type (0-4)")
+    cp: int = Field(..., ge=1, le=4, description="Chest pain type (1-4)")
     trestbps: int = Field(..., ge=0, description="Resting blood pressure (in mm Hg)")
     ecg: List[int] = Field(..., description="ECG signal data as array of integers")
     thalach: int = Field(..., ge=0, description="Maximum heart rate achieved")
