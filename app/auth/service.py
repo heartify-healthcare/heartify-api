@@ -13,7 +13,7 @@ from pathlib import Path
 
 from app.auth.repository import OTPRepository
 from app.auth.entity import OTP
-from app.auth.schema import RegisterSchema, RequestVerifySchema, VerifySchema, LoginSchema
+from app.auth.schema import RegisterSchema, RequestVerifySchema, VerifySchema, LoginSchema, RecoverPasswordSchema
 from app.users.repository import UserRepository
 from app.users.entity import User
 
@@ -38,6 +38,28 @@ class AuthService:
     def _generate_otp(self) -> str:
         """Generate 6-digit OTP"""
         return ''.join(random.choices(string.digits, k=6))
+
+    def _generate_new_password(self) -> str:
+        """Generate 8-character password with uppercase, lowercase, and digits"""
+        uppercase = string.ascii_uppercase
+        lowercase = string.ascii_lowercase
+        digits = string.digits
+        
+        # Ensure at least one character from each type
+        password = [
+            random.choice(uppercase),
+            random.choice(lowercase),
+            random.choice(digits)
+        ]
+        
+        # Fill remaining 5 characters with random mix
+        all_chars = uppercase + lowercase + digits
+        for _ in range(5):
+            password.append(random.choice(all_chars))
+        
+        # Shuffle to avoid predictable pattern
+        random.shuffle(password)
+        return ''.join(password)
 
     def _send_email(self, to_email: str, subject: str, body: str, is_html: bool = False) -> bool:
         """Send email (implement based on your email service)"""
@@ -158,6 +180,23 @@ class AuthService:
         
         return self._send_email(user.email, subject, html_body, is_html=True)
 
+    def _send_password_recovery_email(self, user: User, new_password: str) -> bool:
+        """Send password recovery email with new password"""
+        # Load HTML template
+        template_path = Path(__file__).parent / "templates" / "password_recovery.html"
+        
+        with open(template_path, 'r', encoding='utf-8') as file:
+            html_body = file.read()
+        
+        # Replace placeholders
+        html_body = html_body.replace("{{ username }}", user.username)
+        html_body = html_body.replace("{{ newPassword }}", new_password)
+        
+        # Send email
+        subject = "Password Recovery - Heartify"
+        
+        return self._send_email(user.email, subject, html_body, is_html=True)
+
     def request_verify(self, data: RequestVerifySchema) -> Tuple[Optional[Dict[str, str]], Optional[Dict[str, str]]]:
         """Send verification OTP to user's email"""
         user = self.user_repo.get_by_email(data.email)
@@ -225,6 +264,37 @@ class AuthService:
                 "role": user.role,
                 "is_verified": user.is_verified
             }
+        }, None
+
+    def recover_password(self, data: RecoverPasswordSchema) -> Tuple[Optional[Dict[str, str]], Optional[Dict[str, str]]]:
+        """Recover password by validating username, email, and phone number"""
+        # Step 1: Check if username exists
+        user = self.user_repo.get_by_username(data.username)
+        if not user:
+            return None, {"error": "Username not found"}
+        
+        # Step 2: Check if email matches
+        if user.email != data.email:
+            return None, {"error": "Email does not match"}
+        
+        # Step 3: Check if phone number matches
+        if user.phonenumber != data.phone_number:
+            return None, {"error": "Phone number does not match"}
+        
+        # All validations passed, generate new password
+        new_password = self._generate_new_password()
+        
+        # Hash and update password
+        hashed_password = self._hash_password(new_password)
+        user.password = hashed_password
+        self.user_repo.update(user)
+        
+        # Send recovery email
+        email_sent = self._send_password_recovery_email(user, new_password)
+        
+        return {
+            "message": "Password reset successfully. Please check your email for the new password.",
+            "email_sent": email_sent
         }, None
 
     def verify_jwt_token(self, token: str) -> Tuple[Optional[Dict[str, Any]], Optional[str]]:
