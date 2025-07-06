@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify, g
 from functools import wraps
 from app.auth.service import AuthService
-from app.auth.schema import RegisterSchema, RequestVerifySchema, VerifySchema, LoginSchema
+from app.auth.schema import RegisterSchema, RequestVerifySchema, VerifySchema, LoginSchema, RecoverPasswordSchema
 
 auth_bp = Blueprint("auth", __name__)
 
@@ -87,6 +87,20 @@ def login():
         return jsonify(result), 200
     # except Exception as e:
         # return jsonify({"error": str(e)}), 400
+
+@auth_bp.route("/recover-password", methods=["POST"])
+def recover_password():
+    try:
+        data = RecoverPasswordSchema.parse_obj(request.json)
+        service = AuthService(g.db)
+        result, error = service.recover_password(data)
+        
+        if error:
+            return jsonify(error), 400
+            
+        return jsonify(result), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
 
 # Test endpoint to verify JWT token
 @auth_bp.route("/me", methods=["GET"])

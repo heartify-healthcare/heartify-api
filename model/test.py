@@ -3,13 +3,13 @@ import joblib
 from tensorflow.keras.models import load_model
 
 # Load model đã huấn luyện
-model = load_model("/content/heart_cnn_lstm_model.keras")
+model = load_model("./model/heart_cnn_lstm_model.keras")
 
 # Load scaler đã được fit trên dữ liệu train
-scaler = joblib.load("/content/scaler.save")
+scaler = joblib.load("./model/scaler.save")
 
 # Dữ liệu mẫu (phải đúng thứ tự cột như trong dataset gốc)
-X = np.array([[52,1,4,160,246,0,1,82,1,4.0,2]])
+X = np.array([[10, 1, 2, 190, 1, 172, 0]])
 
 # Chuẩn hóa
 X_scaled = scaler.transform(X)

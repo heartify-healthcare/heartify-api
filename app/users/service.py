@@ -43,7 +43,7 @@ class UserService:
             role=data.role,
             is_verified=True,  # Admin-created users are automatically verified
             # Health fields default to None
-            age=None,
+            dob=None,
             sex=None,
             cp=None,
             trestbps=None,

@@ -1,6 +1,6 @@
 from pydantic import BaseModel, EmailStr, constr, validator
 from typing import Optional
-from datetime import datetime
+from datetime import datetime, date
 
 class UserCreateSchema(BaseModel):
     username: constr(min_length=3)
@@ -31,7 +31,7 @@ class UserUpdateSchema(BaseModel):
     is_verified: Optional[bool] = None
     role: Optional[str] = None
     # Health-related fields
-    age: Optional[int] = None
+    dob: Optional[date] = None  # Date of Birth
     sex: Optional[int] = None
     cp: Optional[int] = None
     trestbps: Optional[int] = None
@@ -51,10 +51,15 @@ class UserUpdateSchema(BaseModel):
             return None  # Convert empty strings to None
         return v
 
-    @validator('age')
-    def validate_age(cls, v):
-        if v is not None and (v < 0 or v > 150):
-            raise ValueError('Age must be between 0 and 150')
+    @validator('dob')
+    def validate_dob(cls, v):
+        if v is not None:
+            # Check if date is not in the future
+            if v > date.today():
+                raise ValueError('Date of birth cannot be in the future')
+            # Check for reasonable date range (not too old)
+            if v.year < 1900:
+                raise ValueError('Date of birth cannot be before 1900')
         return v
 
     @validator('sex')
@@ -65,8 +70,8 @@ class UserUpdateSchema(BaseModel):
 
     @validator('cp')
     def validate_cp(cls, v):
-        if v is not None and v not in [0, 1, 2, 3]:
-            raise ValueError('CP must be 0, 1, 2, or 3')
+        if v is not None and v not in [1, 2, 3, 4]:
+            raise ValueError('CP must be 1, 2, 3, or 4')
         return v
 
     @validator('trestbps')
@@ -90,7 +95,7 @@ class UserOutSchema(BaseModel):
     role: str
     created_at: datetime
     # Health-related fields
-    age: Optional[int] = None
+    dob: Optional[date] = None  # Date of Birth
     sex: Optional[int] = None
     cp: Optional[int] = None
     trestbps: Optional[int] = None
@@ -113,16 +118,21 @@ class UserProfileSchema(BaseModel):
 
 class UserHealthUpdateSchema(BaseModel):
     """Schema for updating only health-related fields"""
-    age: Optional[int] = None
+    dob: Optional[date] = None  # Date of Birth
     sex: Optional[int] = None
     cp: Optional[int] = None
     trestbps: Optional[int] = None
     exang: Optional[int] = None
 
-    @validator('age')
-    def validate_age(cls, v):
-        if v is not None and (v < 0 or v > 150):
-            raise ValueError('Age must be between 0 and 150')
+    @validator('dob')
+    def validate_dob(cls, v):
+        if v is not None:
+            # Check if date is not in the future
+            if v > date.today():
+                raise ValueError('Date of birth cannot be in the future')
+            # Check for reasonable date range (not too old)
+            if v.year < 1900:
+                raise ValueError('Date of birth cannot be before 1900')
         return v
 
     @validator('sex')
@@ -133,8 +143,8 @@ class UserHealthUpdateSchema(BaseModel):
 
     @validator('cp')
     def validate_cp(cls, v):
-        if v is not None and v not in [0, 1, 2, 3]:
-            raise ValueError('CP must be 0, 1, 2, or 3')
+        if v is not None and v not in [1, 2, 3, 4]:
+            raise ValueError('CP must be 1, 2, 3, or 4')
         return v
 
     @validator('trestbps')
@@ -148,3 +158,7 @@ class UserHealthUpdateSchema(BaseModel):
         if v is not None and v not in [0, 1]:
             raise ValueError('Exang must be 0 or 1')
         return v
+
+class ChangePasswordSchema(BaseModel):
+    current_password: constr(min_length=1)
+    new_password: constr(min_length=6)

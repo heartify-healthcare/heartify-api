@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, DateTime
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, Date
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from app.database import Base
@@ -16,7 +16,7 @@ class User(Base):
     created_at = Column(DateTime, default=func.now(), nullable=False)
     
     # New health-related fields (optional)
-    age = Column(Integer, nullable=True, default=None)
+    dob = Column(Date, nullable=True, default=None)  # Date of Birth
     sex = Column(Integer, nullable=True, default=None)
     cp = Column(Integer, nullable=True, default=None)
     trestbps = Column(Integer, nullable=True, default=None)

@@ -18,6 +18,11 @@ class LoginSchema(BaseModel):
     username: str
     password: str
 
+class RecoverPasswordSchema(BaseModel):
+    username: str
+    email: EmailStr
+    phone_number: str
+
 class LoginResponseSchema(BaseModel):
     access_token: str
     token_type: str = "bearer"
