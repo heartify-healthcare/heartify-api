@@ -23,18 +23,13 @@ Health metrics expected (in JSON format):
 
 ```json
 {
-  "user_id": 2
   "age": 18,
   "sex": 1,
   "cp": 4,
   "trestbps": 80,
-  "chol": 246,
-  "fbs": 0,
-  "restecg": 1,
+  "ecg": [1, 2, 3, 4, 5, 6],
   "thalach": 82,
-  "exang": 1,
-  "oldpeak": 4.0,
-  "slope": 2
+  "exang": 1
 }
 ```
 
