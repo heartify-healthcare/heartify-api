@@ -97,4 +97,4 @@ This API is part of a university **capstone project** (not a graduation thesis),
 
 ## 📄 License
 
-This project is for academic purposes only. It is not intended for clinical or commercial use.
+This project is available under the [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0) license.
