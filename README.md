@@ -43,7 +43,7 @@ Health metrics expected (in JSON format):
 ### Installation
 
 ```bash
-git clone https://github.com/votranphi/heartify-api
+git clone https://github.com/heartify-healthcare/heartify-api
 cd heartify-api
 pip install -r requirements.txt
 ```
@@ -82,7 +82,7 @@ curl -X POST http://127.0.0.1:5000/predictions/heart-disease \
 ## 🔗 Frontend Integration
 
 This API is used by the mobile frontend built with React Native & Expo.  
-👉 Mobile App Repository: [https://github.com/votranphi/heartify](https://github.com/votranphi/heartify)
+👉 Mobile App Repository: [https://github.com/heartify-healthcare/heartify](https://github.com/heartify-healthcare/heartify)
 
 ## 📚 Academic Context
 
